@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email',250);
             $table->enum('status',['Active','Resolved']);
             $table->text('message');
-            $table->text('comment');
+            $table->text('comment')->nullable();
             $table->foreignId('comment_user_id')->nullable()
                 ->constrained('users')
                 ->cascadeOnUpdate()

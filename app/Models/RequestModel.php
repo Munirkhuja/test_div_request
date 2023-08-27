@@ -21,7 +21,10 @@ class RequestModel extends Model
         'comment',
         'comment_user_id',
     ];
-    protected $dateFormat = 'Y-m-d H:i';
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+    ];
 
     public function comment_user(): BelongsTo
     {
