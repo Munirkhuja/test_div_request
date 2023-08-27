@@ -1,0 +1,45 @@
+version: '3.7'
+
+services:
+  nginx:
+    build: docker/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - php-fpm
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/div-request-backend.conf/:/etc/nginx/conf.d/div-request-backend.conf
+      - ./logs:/var/log
+    working_dir:
+      /var/www
+
+  php-fpm:
+    build:
+      context: docker/php
+      target: dev
+    links:
+      - div-request-db-link
+    volumes:
+      - ./:/var/www
+    working_dir:
+      /var/www
+    environment:
+        PHP_IDE_CONFIG: 'serverName=api.div-request.local'
+
+  div-request-db-link:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: div-request
+      MYSQL_USER: div-request
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rooooot
+    ports:
+      - 3307:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
+    driver: local
